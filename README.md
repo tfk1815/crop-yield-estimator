@@ -3,7 +3,7 @@
 ## Project Overview
 This project predicts crop yield (**tonnes per hectare**) for Nigerian farms based on season and farm-level inputs: state, crop type, farm size, rainfall, temperature, soil pH/type, fertilizer application, pesticide use, irrigation, and seed variety.
 
-To prevent data leakage and bias toward naturally heavier crops (e.g., Cassava vs. Rice), the core machine learning model does not predict raw weight. Instead, it predicts a **Yield Performance Index**—measuring how well a farm is expected to perform relative to the historical baseline average for that specific crop. The interactive web application then seamlessly converts this index back into actionable tonnes/hectare for the end user.
+To prevent data leakage and bias toward naturally heavier crops (e.g., Cassava vs. Rice), the core machine learning model does not predict raw weight. Instead, it predicts a **Yield Performance Index** measuring how well a farm is expected to perform relative to the historical baseline average for that specific crop. The interactive web application then seamlessly converts this index back into actionable tonnes/hectare for the end user.
 
 Intended users include extension officers, agribusinesses, cooperatives, and farmers planning input purchases or harvest logistics ahead of a growing season.
 
@@ -25,7 +25,7 @@ The dataset is synthetic (15,000 rows), generated to match this project's exact 
 | **RMSE** | 0.160 |
 | **R²**   | 0.473 |
 
-*Note: The model successfully captures the environmental and operational variance (R² ≈ 0.47) without over-fitting to the naturally heavy baselines of certain crop types.*
+*The model successfully captures the environmental and operational variance (R² ≈ 0.47) without over-fitting to the naturally heavy baselines of certain crop types.*
 
 ## Project Structure
 ```text
