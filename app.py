@@ -47,8 +47,8 @@ st.markdown("""
 # Cache the model load so it doesn't slow down the app on every click
 @st.cache_resource
 def load_models():
-    model = joblib.load("../models/crop_yield_model.pkl")
-    feature_names = joblib.load("../models/model_features.pkl")
+    model = joblib.load("models/crop_yield_model.pkl")
+    feature_names = joblib.load("models/model_features.pkl")
     return model, feature_names
 
 model, feature_names = load_models()
