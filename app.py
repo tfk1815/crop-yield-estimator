@@ -47,8 +47,8 @@ st.markdown("""
 # Cache the model load so it doesn't slow down the app on every click
 @st.cache_resource
 def load_models():
-    model = joblib.load("crop_yield_model.pkl")
-    feature_names = joblib.load("model_features.pkl")
+    model = joblib.load("../models/crop_yield_model.pkl")
+    feature_names = joblib.load("../models/model_features.pkl")
     return model, feature_names
 
 model, feature_names = load_models()
@@ -126,13 +126,17 @@ st.divider()
 
 # --- Helper: rank inputs by the model's feature importance ---
 def get_ranked_inputs(input_row: dict, model, feature_names):
-    """Returns list of (feature, value, importance) sorted by importance desc.
-    Falls back to input order if the model has no feature_importances_."""
-    try:
-        importances = model.feature_importances_
-        importance_map = dict(zip(feature_names, importances))
-    except AttributeError:
-        importance_map = {f: 0.0 for f in feature_names}
+    """Returns list of (feature, value, importance) sorted by importance desc."""
+    regressor = model.named_steps['regressor']
+    preprocessor = model.named_steps['preprocessor']
+    raw_importances = regressor.feature_importances_
+    transformed_names = preprocessor.get_feature_names_out()
+    imp_map_raw = dict(zip(transformed_names, raw_importances))
+
+    importance_map = {}
+    for feat in feature_names:
+        matched = [v for k, v in imp_map_raw.items() if k.split('__')[-1].startswith(feat)]
+        importance_map[feat] = sum(matched)
 
     ranked = []
     for feat in feature_names:
@@ -214,7 +218,7 @@ if st.button("🚀 Estimate Yield", use_container_width=True):
             value_str = f"{value:.2f}"
         else:
             value_str = str(value)
-        st.caption(f"**{label}** (importance {importance:.3f}): {value_str}")
+        st.caption(f"**{label}** (importance {importance:.3f}%): {value_str}")
 
 st.divider()
 st.caption("**Model:** Gradient Boosting Regressor | **Test-set performance:** MAE ≈ 0.115, RMSE ≈ 0.159, R² ≈ 0.47")
